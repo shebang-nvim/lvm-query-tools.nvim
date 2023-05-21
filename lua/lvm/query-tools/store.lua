@@ -1,7 +1,13 @@
 local store = {}
 local state = require("lvm.query-tools.state")
-local config = require("lvm.query-tools.config").get
 local utils = require("lvm.query-tools.utils")
+
+local function wrap_kind(models, kind)
+  for k, _ in pairs(models or {}) do
+    models[k].kind = kind
+  end
+  return models
+end
 
 store.save_data = state.save_data
 store.get = function(kind)
@@ -9,7 +15,8 @@ store.get = function(kind)
     return {}
   end
 
-  local kinds = state.store.models[kind]
+  local kinds = wrap_kind(state.store.models[kind],kind)
+
   if kind == 'kinds' then
     kinds = vim.tbl_keys(state.store.models)
   end
@@ -39,7 +46,6 @@ store.get = function(kind)
 end
 
 store.kinds = function(opts)
-
   opts = opts or {}
 
   kinds = state.store.kinds

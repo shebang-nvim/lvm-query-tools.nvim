@@ -1,6 +1,6 @@
 local p_debug = vim.fn.getenv "DEBUG_LVM_QUERY_TOOLS"
 if p_debug == vim.NIL then
-  p_debug = false
+  p_debug = true
 end
 
 -- User configuration section
