@@ -22,14 +22,14 @@ qt_finders.kinds_finder = function(opts)
   local results = {}
   for index, value in ipairs(query_result) do
     table.insert(results, {
-      name = value[1].name,
-      kind = "kinds",
+      name = value.kind,
+      kind = value.kind,
       index = index,
-      icon = value[1].icon,
+      icon = value.icon,
 
-      class = value[1].class,
-      text = value[1].description,
-      path = value[1].path,
+      class = value.class,
+      text = value.description,
+      path = value.path,
     })
   end
   --
@@ -67,19 +67,23 @@ end
 ---@param opts table: options to pass to the picker
 ---
 qt_finders.query_finder = function(opts)
-  opts = opts or { query_kind = "repositories" }
+  opts = opts or { }
 
-  local query_result = require("lvm.query-tools").query(opts.kind)
+  if not opts.kind then
+    log.error("qt_finders.query_finder: opts.kind is required")
+    return
+  end
 
+  local query_result = require("lvm.query-tools").query({kind = opts.kind})
   local results = {}
   for index, value in ipairs(query_result) do
     table.insert(results, {
-      name = value[1],
-      kind = opts.kind,
+      name = value.id,
+      kind = value.kind,
       index = index,
-      repository = lvm_qt_utils.normalize_repository(value[1]),
-      text = value[2].description,
-      path = vim.fn.expand(value[2].path),
+      repository = lvm_qt_utils.normalize_repository(value.id),
+      text = value.description,
+      path = vim.fn.expand(value.path),
     })
   end
 

@@ -36,7 +36,7 @@ local defaults = {
     files = {
       icon = "",
       layout_strategy = 'vertical',
-      layout_config = { height = 0.8, width = 0.6, preview_height = 0.3 },
+      layout_config = { height = 0.8, width = 0.8, preview_height = 0.3 },
     },
     repositories = {
       icon = "",

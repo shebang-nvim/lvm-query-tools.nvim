@@ -1,19 +1,53 @@
 local utils = {}
 
 utils.root_patterns = { ".git", "lua" }
-
 ---@class List<T>: { [integer]: T }
 ---
 --- Creates a list from a dictionary. {k=v} => {{k,k}}
 ---@param t Dictionary<any>
 ---@return List<T>
-utils.flatten_dict = function(t)
+utils.flatten_dict1 = function(t)
   if type(t) ~= "table" then
     return {}
   end
   local list = {}
   for k, v in pairs(t) do
     table.insert(list, 1, { k, v })
+  end
+  return list
+end
+
+
+---@class List<T>: { [integer]: T }
+---
+--- Creates a list from a dictionary. {k=v} => {{k,k}}
+---@param t Dictionary<any>
+---@return List<T>
+utils.flatten_dict = function(t, key_maker, entry_maker)
+  if type(t) ~= "table" then
+    return {}
+  end
+  local list = {}
+
+  local _key_maker = function (key)
+    return {"kind", key}
+  end
+
+  local _entry_maker = function(k, v)
+    v[k[1]] = k[2]
+    return v
+  end
+
+  if type(entry_maker) == "function" then
+    _entry_maker = entry_maker
+  end
+
+  if type(key_maker) == "function" then
+    _key_maker = key_maker
+  end
+
+  for k, v in pairs(t) do
+    table.insert(list, _entry_maker(_key_maker(k), v))
   end
   return list
 end

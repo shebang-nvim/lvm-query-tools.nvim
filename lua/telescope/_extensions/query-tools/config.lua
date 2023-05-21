@@ -9,6 +9,9 @@ local defaults = require("telescope._extensions.query-tools.defaults")
 local log = require("telescope._extensions.query-tools.log")
 local state = require("telescope._extensions.query-tools.state")
 
+config.valid_kinds =function ()
+ return vim.tbl_keys(config.values.kinds)
+end
 config.make_layout_config = function(kind, opts)
   if not config.values.kinds[kind] then
     return

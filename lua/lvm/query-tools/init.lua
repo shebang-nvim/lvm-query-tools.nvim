@@ -65,7 +65,7 @@ H.apply_config = function(config)
 	conf.set(obj)
 end
 
-LvmQueryTools.query = store.get
+LvmQueryTools.query = store.query
 LvmQueryTools.kinds = store.kinds
 
 

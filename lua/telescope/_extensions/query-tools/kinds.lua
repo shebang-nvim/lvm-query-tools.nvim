@@ -14,7 +14,7 @@ function Kinds:new(opts)
 
   local obj = setmetatable({
     kind = "kinds",
-    picker = qt_pickers.query_picker(opts)
+    picker = qt_pickers.kinds_picker(opts)
 
   }, self)
 

@@ -2,6 +2,7 @@ local api = {}
 local query = {}
 
 local log = require("telescope._extensions.query-tools.log")
+local config = require("telescope._extensions.query-tools.config")
 local Query = require("telescope._extensions.query-tools.query").Query
 local Kinds = require("telescope._extensions.query-tools.kinds").Kinds
 local lvm_qt_utils = require("lvm.query-tools.utils")
@@ -96,11 +97,12 @@ end
 local query_api_builder = function(opts)
   if not core_api_build_cache._methods.query then
     -- _query_pickers_map = init_query_picker_table(opts)
+    -- local all_kinds = require 'lvm.query-tools'.kinds({ reducer = { keys = true } })
+    local all_kinds = config.valid_kinds()
     local _query_pickers_map = {}
-    local all_kinds = require 'lvm.query-tools'.query("kinds")
     for _, kind in ipairs(all_kinds) do
       _query_pickers_map[kind] = function(user_opts)
-        return Query:new(vim.tbl_deep_extend("force", { kind = kind},user_opts or {}))
+        return Query:new(vim.tbl_deep_extend("force", { kind = kind }, user_opts or {}))
       end
     end
 
@@ -114,13 +116,14 @@ end
 local kinds_api_builder = function()
   if not core_api_build_cache._methods.kinds then
     local _kinds_pickers_map = {}
-    local all_kinds = require 'lvm.query-tools'.kinds()
+    -- local all_kinds = require 'lvm.query-tools'.kinds({ formatter = { flatten = true } })
+    local all_kinds = config.valid_kinds()
     for _, kind in ipairs(all_kinds) do
       _kinds_pickers_map[kind] = function(user_opts)
       end
     end
 
-        local obj = Kinds:new(vim.tbl_deep_extend("force", { },user_opts or {}))
+    local obj = Kinds:new(vim.tbl_deep_extend("force", {}, user_opts or {}))
     core_api_build_cache._methods.kinds = _kinds_pickers_map
   end
 
